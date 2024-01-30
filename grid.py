@@ -26,15 +26,15 @@ class Grid:
                 state = self.grid[y][x].getState()
                 if state == 1 and y < self.row - 1:
                     below = self.grid[y + 1][x].getState()
-                    if below == 0:
+                    if below == 0 :
                         self.grid[y][x].setState(0)
                         self.grid[y + 1][x].setState(1)
-                    else:
+                    elif below == 1 and x > 0 and x < self.col - 1:
                         right = self.grid[y+1][x + 1].getState()
                         left = self.grid[y+1][x - 1].getState()
                         if right == 0 and left == 0:
                             self.grid[y][x].setState(0)
-                            self.grid[y + 1][x + rd.randrange(-1,1)].setState(1)
+                            self.grid[y + 1][x + rd.randrange(-1,1,2)].setState(1)
                         elif right == 0:
                             self.grid[y][x].setState(0)
                             self.grid[y + 1][x + 1].setState(1)

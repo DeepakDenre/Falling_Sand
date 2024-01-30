@@ -1,5 +1,6 @@
 
 # Game setting
+TITLE = "Cellular Automata"
 
 # Screen setting
 width = 1920//2
@@ -11,7 +12,7 @@ SCREEN_COLOR = (0, 0, 0)
 FPS = 60
 
 # Grid setting
-cell_size = 8
+cell_size = 4
 col = width // cell_size
 row = height // cell_size
 

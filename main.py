@@ -1,34 +1,40 @@
 import pygame as pg
-import sys
 import grid as gd
+import brush as br
 from setting import *
 
-grid = gd.Grid(col, row, cell_size)
+class main:
+    def __init__(self,):
+        pg.init()
+        pg.display.set_caption(TITLE)
+        self.grid = gd.Grid(col, row, cell_size)
+        self.brush = br.brush(self.grid, 3)
+        self.screen = pg.display.set_mode(SCREEN_SIZE)
+        self.clock = pg.time.Clock()
+        self.running = True
 
-if __name__ == '__main__':
-    pg.init()
-    screen = pg.display.set_mode(SCREEN_SIZE)
-    pg.display.set_caption('Falling Sand Simulation')
-    clock = pg.time.Clock()
-    
-    while True:
+    def gameEvent(self):
         for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                pg.quit()
-                sys.exit()
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and (event.key == pg.K_ESCAPE or event.key == pg.K_x)):
+                # close the game
+                self.running = False
+        # if pg.mouse.get_pressed()[0]: left click set cell state to 1
+        self.brush.draw()
 
-        # Draw the sand
-        grid.draw()
-            
-        screen.fill(black)
+    def gameLogicUpdate(self):
+        self.grid.update()
 
-        # Update the grid
-        grid.update()
+    def gameRender(self):
+        self.screen.fill(SCREEN_COLOR)
+        self.grid.render(self.screen)
+        pg.display.update()
 
-        # Draw the grid
-        grid.render(screen,(255, 255, 255))
+    def run(self):
+        while self.running:
+            self.gameEvent()
+            self.gameLogicUpdate()
+            self.gameRender()
+            self.clock.tick(FPS)
+        pg.quit()
 
-        pg.display.flip()
-        clock.tick(FPS)
-
-    pg.quit()
+main().run()
