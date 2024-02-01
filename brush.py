@@ -14,5 +14,9 @@ class brush:
                 for j in range(self.brushSize):
                     if i + y // self.grid.cell_size < self.grid.row and j + x // self.grid.cell_size < self.grid.col:
                         self.grid.grid[i + y // self.grid.cell_size][j + x // self.grid.cell_size].setState(1)
-                    else:
-                        pass
+        elif pg.mouse.get_pressed()[2]:
+            x, y = pg.mouse.get_pos()
+            for i in range(self.brushSize):
+                for j in range(self.brushSize):
+                    if i + y // self.grid.cell_size < self.grid.row and j + x // self.grid.cell_size < self.grid.col:
+                        self.grid.grid[i + y // self.grid.cell_size][j + x // self.grid.cell_size].setState(0)

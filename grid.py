@@ -42,7 +42,3 @@ class Grid:
                             self.grid[y][x].setState(0)
                             self.grid[y + 1][x - 1].setState(1)
     
-    def draw(self):
-        if pg.mouse.get_pressed()[0]:
-            x, y = pg.mouse.get_pos()
-            self.grid[y // self.cell_size][x // self.cell_size].setState(1)

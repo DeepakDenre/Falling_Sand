@@ -6,7 +6,7 @@ compile_run:
 	./dist/main
 
 clean:
-	rm -rf build dist main.spec
+	rm -rf build dist main.spec __pycache__
 
 run:
 	python main.py
