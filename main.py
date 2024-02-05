@@ -8,7 +8,7 @@ class main:
         pg.init()
         pg.display.set_caption(TITLE)
         self.grid = gd.Grid(col, row, cell_size)
-        self.brush = br.brush(self.grid, 3)
+        self.brush = br.brush(self.grid, brushSize)
         self.screen = pg.display.set_mode(SCREEN_SIZE)
         self.clock = pg.time.Clock()
         self.running = True
@@ -18,8 +18,8 @@ class main:
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and (event.key == pg.K_ESCAPE or event.key == pg.K_x)):
                 # close the game
                 self.running = False
-        # if pg.mouse.get_pressed()[0]: left click set cell state to 1
-        self.brush.draw()
+        if pg.mouse.get_pressed()[0]: #left click set cell state to 1
+            self.brush.Cursor()
 
     def gameLogicUpdate(self):
         self.grid.update()

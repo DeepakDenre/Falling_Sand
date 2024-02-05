@@ -3,42 +3,51 @@ import random as rd
 import cell as cl
 from setting import *
 
-colorSet = [red, green, blue, yellow]
 
 class Grid:
     def __init__(self, col, row, cell_size):
         self.col = col
         self.row = row
         self.cell_size = cell_size
-        self.grid = [[cl.Cell(cell_size,color=colorSet[rd.randrange(0,len(colorSet))]) for _ in range(col)] for _ in range(row)]
-
+        self.gridCurrent = [[cl.Cell(cell_size,color=sandColorSet[rd.randrange(0,len(sandColorSet))]) for _ in range(col)] for _ in range(row)]
+        self.gridNext = self.gridCurrent
+        self.gridEmpty = self.gridCurrent
     def render(self, screen,color = (255, 255, 255)):
-        for y in range(self.row):
-            for x in range(self.col):
-                if self.grid[y][x].getState() == 1:
-                    pg.draw.rect(screen, self.grid[y][x].getcolor(), (x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size))
+        for x in range(self.col):
+            for y in range(self.row):
+                if self.gridCurrent[y][x].getState() == 1:
+                    pg.draw.rect(screen, self.gridCurrent[y][x].getColor(), (x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size))
                 else:
                     pass
 
     def update(self):
-        for y in range(self.row):
-            for x in range(self.col):
-                state = self.grid[y][x].getState()
-                if state == 1 and y < self.row - 1:
-                    below = self.grid[y + 1][x].getState()
-                    if below == 0 :
-                        self.grid[y][x].setState(0)
-                        self.grid[y + 1][x].setState(1)
-                    elif below == 1 and x > 0 and x < self.col - 1:
-                        right = self.grid[y+1][x + 1].getState()
-                        left = self.grid[y+1][x - 1].getState()
-                        if right == 0 and left == 0:
-                            self.grid[y][x].setState(0)
-                            self.grid[y + 1][x + rd.randrange(-1,1,2)].setState(1)
-                        elif right == 0:
-                            self.grid[y][x].setState(0)
-                            self.grid[y + 1][x + 1].setState(1)
-                        elif left == 0:
-                            self.grid[y][x].setState(0)
-                            self.grid[y + 1][x - 1].setState(1)
-    
+        for x in range(0,self.col):
+            for y in range(0,self.row):
+                try:
+                    state = self.gridCurrent[y][x].getState()
+                    down = self.gridCurrent[y+1][x].getState()
+                    downRight = self.gridCurrent[y+1][x+1].getState()
+                    downLeft = self.gridCurrent[y+1][x-1].getState()
+                    if state == 1:
+                        if down == 0:
+                            self.gridNext[y][x].setState(0)
+                            self.gridNext[y+1][x].setState(1)
+                            cl.Cell.swapColor(self, x, y, x, y+1)
+                        elif downRight == 0 and downLeft ==0:
+                            ran = rd.randrange(-1,2,2)
+                            self.gridNext[y][x].setState(0)
+                            self.gridNext[y+1][x+ ran].setState(1)
+                            cl.Cell.swapColor(self, x, y, x+ran, y+1)
+                        elif downRight == 0 and downLeft == 1:
+                            self.gridNext[y][x].setState(0)
+                            self.gridNext[y+1][x+1].setState(1)
+                            cl.Cell.swapColor(self, x, y, x+1, y+1)
+                        elif downLeft == 0 and downRight == 1:
+                            self.gridNext[y][x].setState(0)
+                            self.gridNext[y+1][x-1].setState(1)
+                            cl.Cell.swapColor(self, x, y, x-1, y+1)
+                    else:
+                        self.gridNext[y][x].setState(0)
+                except:
+                    pass
+        self.gridCurrent, self.gridNext = self.gridNext, self.gridEmpty
